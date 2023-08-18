@@ -6,34 +6,41 @@ import com.google.gson.GsonBuilder;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import java.time.Duration;
 
 public class CohereApiFactory {
 
-    public CohereApi build(CohereConfig config) {
+    Gson gson;
+    OkHttpClient okHttpClient;
+
+    public CohereApiFactory createHttpClient(CohereConfig config) {
         String apiKey = config.getApiKey();
         Duration timeout = config.getTimeout();
-        CohereApi api = buildApi(apiKey, timeout);
-        return api;
-    }
-
-    CohereApi buildApi(String apiKey, Duration timeout) {
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+        okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(new AuthorizationInterceptor(apiKey))
                 .callTimeout(timeout)
                 .connectTimeout(timeout)
                 .readTimeout(timeout)
                 .writeTimeout(timeout)
                 .build();
+        return this;
+    }
 
-        Gson gson = new GsonBuilder()
+    CohereApiFactory createGson() {
+        this.gson = new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .setLenient()
                 .create();
+        return this;
+    }
 
+    CohereApi build() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(CohereConfig.BASE_URL)
                 .client(okHttpClient)
+                .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 

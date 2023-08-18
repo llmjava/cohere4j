@@ -49,6 +49,11 @@
       <artifactId>converter-gson</artifactId>
       <version>${retrofit2.version}</version>
     </dependency>
+    <dependency>
+      <groupId>com.squareup.retrofit2</groupId>
+      <artifactId>converter-scalars</artifactId>
+      <version>${retrofit2.version}</version>
+    </dependency>
 
     <dependency>
       <groupId>org.junit.jupiter</groupId>
