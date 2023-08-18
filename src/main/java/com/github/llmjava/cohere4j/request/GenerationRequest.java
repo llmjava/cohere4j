@@ -1,5 +1,7 @@
 package com.github.llmjava.cohere4j.request;
 
+import com.github.llmjava.cohere4j.CohereConfig;
+
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +19,11 @@ public class GenerationRequest {
      * Smaller, "light" models are faster, while larger models will perform better. Custom models can also be supplied with their full ID.
      */
     private String model;
+
+    /**
+     * The maximum number of generations that will be returned. Defaults to 1, min value of 1, max value of 5.
+     */
+    private Integer num_generations;
 
     /**
      * When true, the response will be a JSON stream of events. Streaming is beneficial for user interfaces that render the contents of the response piece by piece, as it gets generated.
@@ -116,12 +123,22 @@ public class GenerationRequest {
     private Map<String, Double> logit_bias;
 
     GenerationRequest(Builder builder) {
-        this.prompt = builder.prompt;
-        this.model = builder.model;
-        this.stream = builder.stream;
-        this.max_tokens = builder.max_tokens;
-        this.truncate = builder.truncate;
-        this.return_likelihoods = builder.return_likelihoods;
+        prompt = builder.prompt;
+        model = builder.model;
+        num_generations = builder.num_generations;
+        stream = builder.stream;
+        max_tokens = builder.max_tokens;
+        truncate = builder.truncate;
+        temperature = builder.temperature;
+        preset = builder.preset;
+        end_sequences = builder.end_sequences;
+        stop_sequences = builder.stop_sequences;
+        k = builder.k;
+        p = builder.p;
+        frequency_penalty = builder.frequency_penalty;
+        presence_penalty = builder.presence_penalty;
+        return_likelihoods = builder.return_likelihoods;
+        logit_bias = builder.logit_bias;
     }
 
     public Boolean isStreaming() {
@@ -131,10 +148,20 @@ public class GenerationRequest {
     public static class Builder {
         private String prompt;
         private String model;
+        private Integer num_generations;
         private Boolean stream;
         private Integer max_tokens;
         private String truncate;
+        private Double temperature;
+        private String preset;
+        private List<String> end_sequences;
+        private List<String> stop_sequences;
+        private Integer k;
+        private Double p;
+        private Double frequency_penalty;
+        private Double presence_penalty;
         private String return_likelihoods;
+        private Map<String, Double> logit_bias;
 
         public Builder withPrompt(String prompt) {
             this.prompt = prompt;
@@ -163,6 +190,25 @@ public class GenerationRequest {
 
         public Builder withLikelihoods(String likelihoods) {
             this.return_likelihoods = likelihoods;
+            return this;
+        }
+
+        public Builder withConfig(CohereConfig config) {
+            model = config.getModel();
+            num_generations = config.getNumGenerations();
+            stream = config.isStream();
+            max_tokens = config.getMaxTokens();
+            truncate = config.getTruncate();
+            temperature = config.getTemperature();
+            preset = config.getPreset();
+            end_sequences = config.getEndSequences();
+            stop_sequences = config.getStopSequences();
+            k = config.getTopK();
+            p = config.geTopP();
+            frequency_penalty = config.getFrequencyPenalty();
+            presence_penalty = config.getPresencePenalty();
+            return_likelihoods = config.getReturnLikelihoods();
+            logit_bias = config.getLogitBias();
             return this;
         }
 

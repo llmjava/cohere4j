@@ -16,7 +16,7 @@ public class GenerationExample {
         String text = "tell a joke";
         GenerationRequest request1 = new GenerationRequest.Builder()
                 .withPrompt(text)
-                .withMaxTokens(1024)
+                .withConfig(config)
                 .build();
 
         System.out.println("--- Sync example");
@@ -37,8 +37,8 @@ public class GenerationExample {
 
         GenerationRequest request2 = new GenerationRequest.Builder()
                 .withPrompt(text)
+                .withConfig(config)
                 .withStream(true)
-                .withMaxTokens(1024)
                 .build();
         client.generateStream(request2, new StreamingCallback<StreamingGenerationResponse>() {
             @Override
