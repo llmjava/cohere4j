@@ -1,6 +1,8 @@
 package com.github.llmjava.cohere4j.response.streaming;
 
-public class StreamingCompletionResponse {
+import java.util.List;
+
+public class StreamingGenerationResponse {
 
     private String text;
     private Integer index;
@@ -19,14 +21,14 @@ public class StreamingCompletionResponse {
     public String getText() {
         String text = this.text;
         if(text == null && this.response!=null && this.response.generations!=null) {
-            text = this.response.generations.text;
+            text = this.response.generations.get(0).text;
         }
         return text;
     }
 
     static class Response {
         private String id;
-        private Generation generations;
+        private List<Generation> generations;
     }
 
     static class Generation {

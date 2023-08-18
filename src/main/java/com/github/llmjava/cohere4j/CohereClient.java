@@ -2,9 +2,11 @@ package com.github.llmjava.cohere4j;
 
 import com.github.llmjava.cohere4j.callback.AsyncCallback;
 import com.github.llmjava.cohere4j.callback.StreamingCallback;
-import com.github.llmjava.cohere4j.request.CompletionRequest;
-import com.github.llmjava.cohere4j.response.CompletionResponse;
-import com.github.llmjava.cohere4j.response.streaming.StreamingCompletionResponse;
+import com.github.llmjava.cohere4j.request.GenerationRequest;
+import com.github.llmjava.cohere4j.response.GenerationResponse;
+import com.github.llmjava.cohere4j.response.streaming.StreamingGenerationResponse;
+import com.github.llmjava.cohere4j.response.streaming.ResponseConverter;
+import com.google.gson.Gson;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -13,17 +15,19 @@ import java.io.IOException;
 public class CohereClient {
     private final CohereApi api;
     private final CohereConfig config;
+    private final Gson gson;
 
     CohereClient(Builder builder) {
         this.api = builder.api;
         this.config = builder.config;
+        this.gson = builder.gson;
     }
 
-    public String generate(CompletionRequest request) {
+    public GenerationResponse generate(GenerationRequest request) {
         try {
-            Response<CompletionResponse> response = api.generate(request).execute();
+            Response<GenerationResponse> response = api.generate(request).execute();
             if (response.isSuccessful()) {
-                return response.body().getTexts().get(0);
+                return response.body();
             } else  {
                 throw newException(response);
             }
@@ -32,32 +36,40 @@ public class CohereClient {
         }
     }
 
-    public void generateAsync(CompletionRequest request, AsyncCallback<String> callback) {
-        api.generate(request).enqueue(new retrofit2.Callback<CompletionResponse>() {
+    public void generateAsync(GenerationRequest request, AsyncCallback<GenerationResponse> callback) {
+        api.generate(request).enqueue(new retrofit2.Callback<GenerationResponse>() {
             @Override
-            public void onResponse(Call<CompletionResponse> call, Response<CompletionResponse> response) {
+            public void onResponse(Call<GenerationResponse> call, Response<GenerationResponse> response) {
                 if (response.isSuccessful()) {
-                    callback.onSuccess(response.body().getTexts().get(0));
+                    callback.onSuccess(response.body());
                 } else  {
                     callback.onFailure(newException(response));
                 }
             }
 
             @Override
-            public void onFailure(Call<CompletionResponse> call, Throwable throwable) {
+            public void onFailure(Call<GenerationResponse> call, Throwable throwable) {
                 callback.onFailure(throwable);
             }
         });
     }
 
-    public void generateStream(CompletionRequest request, StreamingCallback<String> callback) {
-        api.generateStream(request).enqueue(new retrofit2.Callback<CompletionResponse>() {
+    public void generateStream(GenerationRequest request, StreamingCallback<StreamingGenerationResponse> callback) {
+        if(!request.isStreaming()) {
+            throw new IllegalArgumentException("Expected a streaming request");
+        }
+        ResponseConverter converter = new ResponseConverter(gson);
+        api.generateStream(request).enqueue(new retrofit2.Callback<String>() {
             @Override
-            public void onResponse(Call<CompletionResponse> call, Response<CompletionResponse> response) {
+            public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful()) {
-                    CompletionResponse resp = response.body();
-                    callback.onPart(resp.getTexts().get(0));
-                    callback.onComplete();
+                    for(StreamingGenerationResponse resp: converter.toStreamingGenerationResponse(response.body())) {
+                        if(resp.isFinished()) {
+                            callback.onComplete(resp);
+                        } else {
+                            callback.onPart(resp);
+                        }
+                    }
 
                 } else  {
                     callback.onFailure(newException(response));
@@ -65,7 +77,7 @@ public class CohereClient {
             }
 
             @Override
-            public void onFailure(Call<CompletionResponse> call, Throwable throwable) {
+            public void onFailure(Call<String> call, Throwable throwable) {
                 callback.onFailure(throwable);
             }
         });
@@ -90,10 +102,13 @@ public class CohereClient {
     public static class Builder {
         private CohereApi api;
         private CohereConfig config;
+        private Gson gson;
 
         public Builder withConfig(CohereConfig config) {
             this.config = config;
-            this.api = new CohereApiFactory().build(config);
+            CohereApiFactory factory = new CohereApiFactory();
+            this.api = factory.createGson().createHttpClient(config).build();
+            this.gson = factory.gson;
             return this;
         }
 

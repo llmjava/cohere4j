@@ -1,8 +1,7 @@
 package com.github.llmjava.cohere4j;
 
-import com.github.llmjava.cohere4j.request.CompletionRequest;
-import com.github.llmjava.cohere4j.response.CompletionResponse;
-import com.github.llmjava.cohere4j.response.streaming.StreamingCompletionResponse;
+import com.github.llmjava.cohere4j.request.GenerationRequest;
+import com.github.llmjava.cohere4j.response.GenerationResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Headers;
@@ -13,13 +12,13 @@ public interface CohereApi {
 
     @POST("/v1/generate")
     @Headers({"accept: application/json", "content-type: application/json"})
-    Call<CompletionResponse>
-    generate(@Body CompletionRequest request);
+    Call<GenerationResponse>
+    generate(@Body GenerationRequest request);
 
     @Streaming
     @POST("/v1/generate")
     @Headers({"accept: application/stream+json", "content-type: application/json"})
-    Call<CompletionResponse>
-    generateStream(@Body CompletionRequest request);
+    Call<String>
+    generateStream(@Body GenerationRequest request);
 
 }
