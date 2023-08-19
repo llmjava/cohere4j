@@ -16,11 +16,11 @@ public class GenerationExample {
         String text = "tell a joke";
         GenerateRequest request1 = new GenerateRequest.Builder()
                 .withPrompt(text)
-                .withMaxTokens(1024)
+                .withConfig(config)
                 .build();
 
         System.out.println("--- Sync example");
-        System.out.println(client.generate(request1));
+        System.out.println(client.generate(request1).getTexts());
         client.generateAsync(request1, new AsyncCallback<GenerateResponse>() {
             @Override
             public void onSuccess(GenerateResponse completion) {
@@ -37,8 +37,8 @@ public class GenerationExample {
 
         GenerateRequest request2 = new GenerateRequest.Builder()
                 .withPrompt(text)
+                .withConfig(config)
                 .withStream(true)
-                .withMaxTokens(1024)
                 .build();
         client.generateStream(request2, new StreamingCallback<StreamGenerateResponse>() {
             @Override
