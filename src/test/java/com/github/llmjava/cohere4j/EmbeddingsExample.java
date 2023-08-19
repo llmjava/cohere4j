@@ -22,10 +22,10 @@ public class EmbeddingsExample {
         System.out.println("Embeddings: " + response.getEmbeddings(0));
         client.embedAsync(request, new AsyncCallback<EmbedResponse>() {
             @Override
-            public void onSuccess(EmbedResponse completion) {
+            public void onSuccess(EmbedResponse response) {
                 System.out.println("--- Async example - onSuccess");
-                System.out.println("Texts: " + completion.getTexts()[0]);
-                System.out.println("Embeddings: " + completion.getEmbeddings(0));
+                System.out.println("Texts: " + response.getTexts()[0]);
+                System.out.println("Embeddings: " + response.getEmbeddings(0));
             }
 
             @Override

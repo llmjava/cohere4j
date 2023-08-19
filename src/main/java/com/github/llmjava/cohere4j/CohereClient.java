@@ -2,8 +2,10 @@ package com.github.llmjava.cohere4j;
 
 import com.github.llmjava.cohere4j.callback.AsyncCallback;
 import com.github.llmjava.cohere4j.callback.StreamingCallback;
+import com.github.llmjava.cohere4j.request.ClassifyRequest;
 import com.github.llmjava.cohere4j.request.EmbedRequest;
 import com.github.llmjava.cohere4j.request.GenerateRequest;
+import com.github.llmjava.cohere4j.response.ClassifyResponse;
 import com.github.llmjava.cohere4j.response.EmbedResponse;
 import com.github.llmjava.cohere4j.response.GenerateResponse;
 import com.github.llmjava.cohere4j.response.streaming.StreamGenerateResponse;
@@ -68,6 +70,14 @@ public class CohereClient {
 
     public void embedAsync(EmbedRequest request, AsyncCallback<EmbedResponse> callback) {
         execute(api.embed(request), callback);
+    }
+
+    public ClassifyResponse classify(ClassifyRequest request) {
+        return execute(api.classify(request));
+    }
+
+    public void classifyAsync(ClassifyRequest request, AsyncCallback<ClassifyResponse> callback) {
+        execute(api.classify(request), callback);
     }
 
     private <T> T execute(Call<T> action) {

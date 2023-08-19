@@ -6,4 +6,8 @@ public class Meta {
     public static class ApiVersion {
         String version;
     }
+
+    public String getApiVersion() {
+        return api_version.version;
+    }
 }
