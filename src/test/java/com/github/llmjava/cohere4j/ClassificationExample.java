@@ -2,9 +2,7 @@ package com.github.llmjava.cohere4j;
 
 import com.github.llmjava.cohere4j.callback.AsyncCallback;
 import com.github.llmjava.cohere4j.request.ClassifyRequest;
-import com.github.llmjava.cohere4j.request.EmbedRequest;
 import com.github.llmjava.cohere4j.response.ClassifyResponse;
-import com.github.llmjava.cohere4j.response.EmbedResponse;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 
 public class ClassificationExample {
@@ -39,9 +37,9 @@ public class ClassificationExample {
             @Override
             public void onSuccess(ClassifyResponse response) {
                 System.out.println("--- Async example - onSuccess");
-                System.out.println("Input: " + response.getClassification(0).getInput());
-                System.out.println("Prediction: " + response.getClassification(0).getPrediction());
-                System.out.println("Confidence: " + response.getClassification(0).getConfidence());            }
+                System.out.println("Input: " + response.getClassification(1).getInput());
+                System.out.println("Prediction: " + response.getClassification(1).getPrediction());
+                System.out.println("Confidence: " + response.getClassification(1).getConfidence());            }
 
             @Override
             public void onFailure(Throwable throwable) {

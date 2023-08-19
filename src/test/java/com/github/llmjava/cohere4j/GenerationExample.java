@@ -20,7 +20,7 @@ public class GenerationExample {
                 .build();
 
         System.out.println("--- Sync example");
-        System.out.println(client.generate(request1).getTexts());
+        System.out.println(client.generate(request1).getTexts().get(0));
         client.generateAsync(request1, new AsyncCallback<GenerateResponse>() {
             @Override
             public void onSuccess(GenerateResponse completion) {

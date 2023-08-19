@@ -5,9 +5,11 @@ import com.github.llmjava.cohere4j.callback.StreamingCallback;
 import com.github.llmjava.cohere4j.request.ClassifyRequest;
 import com.github.llmjava.cohere4j.request.EmbedRequest;
 import com.github.llmjava.cohere4j.request.GenerateRequest;
+import com.github.llmjava.cohere4j.request.TokenizeRequest;
 import com.github.llmjava.cohere4j.response.ClassifyResponse;
 import com.github.llmjava.cohere4j.response.EmbedResponse;
 import com.github.llmjava.cohere4j.response.GenerateResponse;
+import com.github.llmjava.cohere4j.response.TokenizeResponse;
 import com.github.llmjava.cohere4j.response.streaming.StreamGenerateResponse;
 import com.github.llmjava.cohere4j.response.streaming.ResponseConverter;
 import com.google.gson.Gson;
@@ -78,6 +80,14 @@ public class CohereClient {
 
     public void classifyAsync(ClassifyRequest request, AsyncCallback<ClassifyResponse> callback) {
         execute(api.classify(request), callback);
+    }
+
+    public TokenizeResponse tokenize(TokenizeRequest request) {
+        return execute(api.tokenize(request));
+    }
+
+    public void tokenizeAsync(TokenizeRequest request, AsyncCallback<TokenizeResponse> callback) {
+        execute(api.tokenize(request), callback);
     }
 
     private <T> T execute(Call<T> action) {
