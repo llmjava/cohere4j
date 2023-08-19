@@ -2,9 +2,11 @@ package com.github.llmjava.cohere4j;
 
 import com.github.llmjava.cohere4j.callback.AsyncCallback;
 import com.github.llmjava.cohere4j.callback.StreamingCallback;
-import com.github.llmjava.cohere4j.request.GenerationRequest;
-import com.github.llmjava.cohere4j.response.GenerationResponse;
-import com.github.llmjava.cohere4j.response.streaming.StreamingGenerationResponse;
+import com.github.llmjava.cohere4j.request.EmbedRequest;
+import com.github.llmjava.cohere4j.request.GenerateRequest;
+import com.github.llmjava.cohere4j.response.EmbedResponse;
+import com.github.llmjava.cohere4j.response.GenerateResponse;
+import com.github.llmjava.cohere4j.response.streaming.StreamGenerateResponse;
 import com.github.llmjava.cohere4j.response.streaming.ResponseConverter;
 import com.google.gson.Gson;
 import retrofit2.Call;
@@ -23,38 +25,15 @@ public class CohereClient {
         this.gson = builder.gson;
     }
 
-    public GenerationResponse generate(GenerationRequest request) {
-        try {
-            Response<GenerationResponse> response = api.generate(request).execute();
-            if (response.isSuccessful()) {
-                return response.body();
-            } else  {
-                throw newException(response);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public GenerateResponse generate(GenerateRequest request) {
+        return execute(api.generate(request));
     }
 
-    public void generateAsync(GenerationRequest request, AsyncCallback<GenerationResponse> callback) {
-        api.generate(request).enqueue(new retrofit2.Callback<GenerationResponse>() {
-            @Override
-            public void onResponse(Call<GenerationResponse> call, Response<GenerationResponse> response) {
-                if (response.isSuccessful()) {
-                    callback.onSuccess(response.body());
-                } else  {
-                    callback.onFailure(newException(response));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<GenerationResponse> call, Throwable throwable) {
-                callback.onFailure(throwable);
-            }
-        });
+    public void generateAsync(GenerateRequest request, AsyncCallback<GenerateResponse> callback) {
+        execute(api.generate(request), callback);
     }
 
-    public void generateStream(GenerationRequest request, StreamingCallback<StreamingGenerationResponse> callback) {
+    public void generateStream(GenerateRequest request, StreamingCallback<StreamGenerateResponse> callback) {
         if(!request.isStreaming()) {
             throw new IllegalArgumentException("Expected a streaming request");
         }
@@ -63,7 +42,7 @@ public class CohereClient {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful()) {
-                    for(StreamingGenerationResponse resp: converter.toStreamingGenerationResponse(response.body())) {
+                    for(StreamGenerateResponse resp: converter.toStreamingGenerationResponse(response.body())) {
                         if(resp.isFinished()) {
                             callback.onComplete(resp);
                         } else {
@@ -78,6 +57,44 @@ public class CohereClient {
 
             @Override
             public void onFailure(Call<String> call, Throwable throwable) {
+                callback.onFailure(throwable);
+            }
+        });
+    }
+
+    public EmbedResponse embed(EmbedRequest request) {
+        return execute(api.embed(request));
+    }
+
+    public void embedAsync(EmbedRequest request, AsyncCallback<EmbedResponse> callback) {
+        execute(api.embed(request), callback);
+    }
+
+    private <T> T execute(Call<T> action) {
+        try {
+            Response<T> response = action.execute();
+            if (response.isSuccessful()) {
+                return response.body();
+            } else  {
+                throw newException(response);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    private <T> void execute(Call<T> action, AsyncCallback<T> callback) {
+        action.enqueue(new retrofit2.Callback<T>() {
+            @Override
+            public void onResponse(Call<T> call, Response<T> response) {
+                if (response.isSuccessful()) {
+                    callback.onSuccess(response.body());
+                } else  {
+                    callback.onFailure(newException(response));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<T> call, Throwable throwable) {
                 callback.onFailure(throwable);
             }
         });

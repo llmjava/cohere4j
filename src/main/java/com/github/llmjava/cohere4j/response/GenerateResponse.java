@@ -3,10 +3,11 @@ package com.github.llmjava.cohere4j.response;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GenerationResponse {
+public class GenerateResponse {
     private String id;
     private String prompt;
     private List<Generation> generations;
+    private Meta meta;
 
     public String getPrompt() {
         return prompt;
