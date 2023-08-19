@@ -20,10 +20,10 @@ public class ResponseConverter {
      * Type elmType =  new TypeToken<T>(){}.getType();
      * Type listType = new TypeToken<ArrayList<T>>(){}.getType();
      */
-    public List<StreamingGenerationResponse> toStreamingGenerationResponse(String responseBody) {
-        List<StreamingGenerationResponse> responses = new ArrayList<>();
-        Type elmType =  new TypeToken<StreamingGenerationResponse>(){}.getType();
-        Type listType = new TypeToken<ArrayList<StreamingGenerationResponse>>(){}.getType();
+    public List<StreamGenerateResponse> toStreamingGenerationResponse(String responseBody) {
+        List<StreamGenerateResponse> responses = new ArrayList<>();
+        Type elmType =  new TypeToken<StreamGenerateResponse>(){}.getType();
+        Type listType = new TypeToken<ArrayList<StreamGenerateResponse>>(){}.getType();
         String[] lines = responseBody.split("\n");
         for(String line: lines) {
             if(line.charAt(0)=='[') {

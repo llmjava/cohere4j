@@ -2,7 +2,7 @@ package com.github.llmjava.cohere4j.response.streaming;
 
 import java.util.List;
 
-public class StreamingGenerationResponse {
+public class StreamGenerateResponse {
 
     private String text;
     private Integer index;

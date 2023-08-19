@@ -3,7 +3,7 @@ package com.github.llmjava.cohere4j.request;
 import java.util.List;
 import java.util.Map;
 
-public class GenerationRequest {
+public class GenerateRequest {
 
     /**
      * The input text that serves as the starting point for generating the response.
@@ -115,7 +115,7 @@ public class GenerationRequest {
      */
     private Map<String, Double> logit_bias;
 
-    GenerationRequest(Builder builder) {
+    GenerateRequest(Builder builder) {
         this.prompt = builder.prompt;
         this.model = builder.model;
         this.stream = builder.stream;
@@ -166,8 +166,8 @@ public class GenerationRequest {
             return this;
         }
 
-        public GenerationRequest build() {
-            return new GenerationRequest(this);
+        public GenerateRequest build() {
+            return new GenerateRequest(this);
         }
     }
 }
