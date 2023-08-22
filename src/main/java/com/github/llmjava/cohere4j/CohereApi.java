@@ -1,13 +1,7 @@
 package com.github.llmjava.cohere4j;
 
-import com.github.llmjava.cohere4j.request.ClassifyRequest;
-import com.github.llmjava.cohere4j.request.EmbedRequest;
-import com.github.llmjava.cohere4j.request.GenerateRequest;
-import com.github.llmjava.cohere4j.request.TokenizeRequest;
-import com.github.llmjava.cohere4j.response.ClassifyResponse;
-import com.github.llmjava.cohere4j.response.EmbedResponse;
-import com.github.llmjava.cohere4j.response.GenerateResponse;
-import com.github.llmjava.cohere4j.response.TokenizeResponse;
+import com.github.llmjava.cohere4j.request.*;
+import com.github.llmjava.cohere4j.response.*;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Headers;
@@ -62,4 +56,12 @@ public interface CohereApi {
     @Headers({"accept: application/json", "content-type: application/json"})
     Call<TokenizeResponse>
     tokenize(@Body TokenizeRequest request);
+
+    /**
+     * This endpoint splits input text into smaller units called tokens using byte-pair encoding (BPE). To learn more about tokenization and byte pair encoding, see the tokens page.
+     */
+    @POST("/v1/detokenize")
+    @Headers({"accept: application/json", "content-type: application/json"})
+    Call<DetokenizeResponse>
+    detokenize(@Body DetokenizeRequest request);
 }

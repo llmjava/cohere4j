@@ -2,14 +2,9 @@ package com.github.llmjava.cohere4j;
 
 import com.github.llmjava.cohere4j.callback.AsyncCallback;
 import com.github.llmjava.cohere4j.callback.StreamingCallback;
-import com.github.llmjava.cohere4j.request.ClassifyRequest;
-import com.github.llmjava.cohere4j.request.EmbedRequest;
-import com.github.llmjava.cohere4j.request.GenerateRequest;
-import com.github.llmjava.cohere4j.request.TokenizeRequest;
-import com.github.llmjava.cohere4j.response.ClassifyResponse;
-import com.github.llmjava.cohere4j.response.EmbedResponse;
-import com.github.llmjava.cohere4j.response.GenerateResponse;
-import com.github.llmjava.cohere4j.response.TokenizeResponse;
+import com.github.llmjava.cohere4j.exception.CohereException;
+import com.github.llmjava.cohere4j.request.*;
+import com.github.llmjava.cohere4j.response.*;
 import com.github.llmjava.cohere4j.response.streaming.StreamGenerateResponse;
 import com.github.llmjava.cohere4j.response.streaming.ResponseConverter;
 import com.google.gson.Gson;
@@ -55,7 +50,7 @@ public class CohereClient {
                     }
 
                 } else  {
-                    callback.onFailure(newException(response));
+                    callback.onFailure(CohereException.fromResponse(response));
                 }
             }
 
@@ -90,13 +85,21 @@ public class CohereClient {
         execute(api.tokenize(request), callback);
     }
 
+    public DetokenizeResponse detokenize(DetokenizeRequest request) {
+        return execute(api.detokenize(request));
+    }
+
+    public void detokenizeAsync(DetokenizeRequest request, AsyncCallback<DetokenizeResponse> callback) {
+        execute(api.detokenize(request), callback);
+    }
+
     private <T> T execute(Call<T> action) {
         try {
             Response<T> response = action.execute();
             if (response.isSuccessful()) {
                 return response.body();
             } else  {
-                throw newException(response);
+                throw CohereException.fromResponse(response);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -109,7 +112,7 @@ public class CohereClient {
                 if (response.isSuccessful()) {
                     callback.onSuccess(response.body());
                 } else  {
-                    callback.onFailure(newException(response));
+                    callback.onFailure(CohereException.fromResponse(response));
                 }
             }
 
@@ -119,22 +122,6 @@ public class CohereClient {
             }
         });
     }
-
-    /**
-     * Parse exceptions:
-     * status code: 429; body: {"message":"You are using a Trial key, which is limited to 5 API calls / minute. You can continue to use the Trial key for free or upgrade to a Production key with higher rate limits at 'https://dashboard.cohere.ai/api-keys'. Contact us on 'https://discord.gg/XW44jPfYJu' or email us at support@cohere.com with any questions"}
-     */
-    private static RuntimeException newException(retrofit2.Response<?> response) {
-        try {
-            int code = response.code();
-            String body = response.errorBody().string();
-            String errorMessage = String.format("status code: %s; body: %s", code, body);
-            return new RuntimeException(errorMessage);
-        } catch (IOException e) {
-            return new RuntimeException(e);
-        }
-    }
-
 
     public static class Builder {
         private CohereApi api;
