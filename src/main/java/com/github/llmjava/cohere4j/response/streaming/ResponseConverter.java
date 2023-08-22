@@ -16,9 +16,9 @@ public class ResponseConverter {
     }
 
     /**
-     * Example for generation type
-     * Type elmType =  new TypeToken<T>(){}.getType();
-     * Type listType = new TypeToken<ArrayList<T>>(){}.getType();
+     * Converts the body of a streaming text generation request to instances of StreamGenerateResponse
+     * @param responseBody body of the streaming response from Cohere API
+     * @return a list of text generation response
      */
     public List<StreamGenerateResponse> toStreamingGenerationResponse(String responseBody) {
         List<StreamGenerateResponse> responses = new ArrayList<>();

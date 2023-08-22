@@ -12,6 +12,8 @@ public interface CohereApi {
 
     /**
      * This endpoint generates realistic text conditioned on a given input.
+     * @param request text generation request
+     * @return tokenization response
      */
     @POST("/v1/generate")
     @Headers({"accept: application/json", "content-type: application/json"})
@@ -19,7 +21,9 @@ public interface CohereApi {
     generate(@Body GenerateRequest request);
 
     /**
-     * This endpoint generates realistic text conditioned on a given input.
+     * This streaming endpoint generates realistic text conditioned on a given input.
+     * @param request text generation request
+     * @return a string representing a stream of text generation responses (one per line)
      */
     @Streaming
     @POST("/v1/generate")
@@ -33,6 +37,8 @@ public interface CohereApi {
      * Embeddings can be used to create text classifiers as well as empower semantic search. To learn more about embeddings, see the embedding page.
      *
      * If you want to learn more how to use the embedding model, have a look at the Semantic Search Guide
+     * @param request text embedding request
+     * @return embeddings response
      */
     @POST("/v1/embed")
     @Headers({"accept: application/json", "content-type: application/json"})
@@ -43,6 +49,8 @@ public interface CohereApi {
      * This endpoint makes a prediction about which label fits the specified text inputs best. To make a prediction, Classify uses the provided examples of text + label pairs as a reference.
      *
      * Note: Custom Models trained on classification examples don't require the examples parameter to be passed in explicitly.
+     * @param request text classification request
+     * @return classification response
      */
     @POST("/v1/classify")
     @Headers({"accept: application/json", "content-type: application/json"})
@@ -51,6 +59,8 @@ public interface CohereApi {
 
     /**
      * This endpoint splits input text into smaller units called tokens using byte-pair encoding (BPE). To learn more about tokenization and byte pair encoding, see the tokens page.
+     * @param request text tokenization request
+     * @return tokenization response
      */
     @POST("/v1/tokenize")
     @Headers({"accept: application/json", "content-type: application/json"})
@@ -59,6 +69,8 @@ public interface CohereApi {
 
     /**
      * This endpoint takes tokens using byte-pair encoding and returns their text representation. To learn more about tokenization and byte pair encoding, see the tokens page.
+     * @param request token IDs de-tokenization request
+     * @return de-tokenization response
      */
     @POST("/v1/detokenize")
     @Headers({"accept: application/json", "content-type: application/json"})
@@ -67,6 +79,8 @@ public interface CohereApi {
 
     /**
      * This endpoint identifies which language each of the provided texts is written in.
+     * @param request language detection request
+     * @return language detection response
      */
     @POST("/v1/detect-language")
     @Headers({"accept: application/json", "content-type: application/json"})
