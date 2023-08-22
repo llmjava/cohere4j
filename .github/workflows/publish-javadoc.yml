@@ -5,15 +5,30 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy JavaDoc 🚀
-        uses: MathieuSoysal/Javadoc-publisher.yml@v2.4.0
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          javadoc-branch: javadoc
-          java-version: 17
+          java-version: 8
+          distribution: ubuntu-latest
+          cache: maven
+
+      - name: Generate Javadoc
+        run: mvn javadoc:aggregate
+        shell: bash
+
+      - name: Deploy to GitHub Page 🚀
+        uses: JamesIves/github-pages-deploy-action@v4.4.3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: javadoc
+          clean: true
+          folder: target/site/apidocs
           target-folder: javadoc
-          project: maven
