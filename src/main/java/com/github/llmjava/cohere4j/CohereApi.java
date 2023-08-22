@@ -58,10 +58,18 @@ public interface CohereApi {
     tokenize(@Body TokenizeRequest request);
 
     /**
-     * This endpoint splits input text into smaller units called tokens using byte-pair encoding (BPE). To learn more about tokenization and byte pair encoding, see the tokens page.
+     * This endpoint takes tokens using byte-pair encoding and returns their text representation. To learn more about tokenization and byte pair encoding, see the tokens page.
      */
     @POST("/v1/detokenize")
     @Headers({"accept: application/json", "content-type: application/json"})
     Call<DetokenizeResponse>
     detokenize(@Body DetokenizeRequest request);
+
+    /**
+     * This endpoint identifies which language each of the provided texts is written in.
+     */
+    @POST("/v1/detect-language")
+    @Headers({"accept: application/json", "content-type: application/json"})
+    Call<DetectLanguageResponse>
+    detectLanguage(@Body DetectLanguageRequest request);
 }
