@@ -93,6 +93,14 @@ public class CohereClient {
         execute(api.detokenize(request), callback);
     }
 
+    public DetectLanguageResponse detectLanguage(DetectLanguageRequest request) {
+        return execute(api.detectLanguage(request));
+    }
+
+    public void detectLanguageAsync(DetectLanguageRequest request, AsyncCallback<DetectLanguageResponse> callback) {
+        execute(api.detectLanguage(request), callback);
+    }
+
     private <T> T execute(Call<T> action) {
         try {
             Response<T> response = action.execute();
