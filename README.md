@@ -1,6 +1,6 @@
 # cohere4j
 
-[![build](https://github.com/llmjava/cohere4j/actions/workflows/main.yml/badge.svg)](https://github.com/llmjava/cohere4j/actions/workflows/main.yml) [![Jitpack](https://jitpack.io/v/llmjava/cohere4j.svg)](https://jitpack.io/#llmjava/cohere4j) [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![build](https://github.com/llmjava/cohere4j/actions/workflows/main.yml/badge.svg)](https://github.com/llmjava/cohere4j/actions/workflows/main.yml) [![Jitpack](https://jitpack.io/v/llmjava/cohere4j.svg)](https://jitpack.io/#llmjava/cohere4j) [![Javadoc](https://img.shields.io/badge/JavaDoc-Online-green)](https://llmjava.github.io/cohere4j/javadoc/)  [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 </b>
 
