@@ -40,5 +40,7 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn --batch-mode --update-snapshots package
+    - name: Generate documentation
+      run: mvn javadoc:aggregate
 
 
