@@ -7,7 +7,7 @@
   <groupId>com.github.llmjava</groupId>
   <artifactId>cohere4j</artifactId>
   <packaging>jar</packaging>
-  <version>0.0-SNAPSHOT</version>
+  <version>0.1</version>
 
   <name>cohere4j</name>
   <description>Java library wrapper for Cohere API</description>
