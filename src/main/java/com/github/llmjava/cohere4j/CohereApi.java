@@ -86,4 +86,24 @@ public interface CohereApi {
     @Headers({"accept: application/json", "content-type: application/json"})
     Call<DetectLanguageResponse>
     detectLanguage(@Body DetectLanguageRequest request);
+
+    /**
+     * This endpoint generates a summary in English for a given text.
+     * @param request Summarization request
+     * @return Summarization response
+     */
+    @POST("/v1/summarize")
+    @Headers({"accept: application/json", "content-type: application/json"})
+    Call<SummarizeResponse>
+    summarize(@Body SummarizeRequest request);
+
+    /**
+     * This endpoint takes in a query and a list of texts and produces an ordered array with each text assigned a relevance score.
+     * @param request rerank request
+     * @return rerank response
+     */
+    @POST("/v1/rerank")
+    @Headers({"accept: application/json", "content-type: application/json"})
+    Call<RerankResponse>
+    rerank(@Body RerankRequest request);
 }
