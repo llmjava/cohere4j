@@ -101,6 +101,22 @@ public class CohereClient {
         execute(api.detectLanguage(request), callback);
     }
 
+    public SummarizeResponse summarize(SummarizeRequest request) {
+        return execute(api.summarize(request));
+    }
+
+    public void summarizeAsync(SummarizeRequest request, AsyncCallback<SummarizeResponse> callback) {
+        execute(api.summarize(request), callback);
+    }
+
+    public RerankResponse rerank(RerankRequest request) {
+        return execute(api.rerank(request));
+    }
+
+    public void rerankAsync(RerankRequest request, AsyncCallback<RerankResponse> callback) {
+        execute(api.rerank(request), callback);
+    }
+
     private <T> T execute(Call<T> action) {
         try {
             Response<T> response = action.execute();
