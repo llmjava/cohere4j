@@ -20,7 +20,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <retrofit2.version>2.9.0</retrofit2.version>
-    <junit.version>5.10.0</junit.version>
+    <junit.version>5.10.1</junit.version>
     <commons.version>2.9.0</commons.version>
     <commons-beanutils.version>1.9.4</commons-beanutils.version>
     <truth.version>1.1.5</truth.version>
